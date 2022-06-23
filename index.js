@@ -16,13 +16,27 @@ app.get('/', (_request, response) => {
 
 app.get('/talker', async (req, res) => {
   try {
-    const talker = await read();
+    const talkers = await read();
 
-    console.log(talker);
-
-    return res.status(200).json(talker);
+    return res.status(200).json(talkers);
   } catch (e) {
     return res.status(404).json({ message: 'Palestrantes não encontrados' });    
+  }
+});
+
+app.get('/talker/:id', async (req, res) => {
+  try {
+    const { id: talkerId } = req.params;
+    const talker = await read();
+
+    const talkerFinded = talker.find(({ id }) => id === Number(talkerId));
+
+    if (!talkerFinded) throw new Error();
+    console.log(talkerFinded);
+
+    return res.status(200).json(talkerFinded);
+  } catch (e) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   }
 });
 
