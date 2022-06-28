@@ -6,7 +6,7 @@ const getAll = async (req, res) => {
     const talkers = await talkerService.getAll();
 
     if (!talkers || talkers.length === 0) {
-      return res.status(NOT_FOUND).json({ message: 'Palestrantes não encontrados' });
+      return res.status(OK).json([]);
     }
 
     return res.status(OK).json(talkers);
