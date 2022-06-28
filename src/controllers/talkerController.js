@@ -1,31 +1,34 @@
-const { read } = require('../helpers/writeAndReadFile');
-const { OK, NOT_FOUND } = require('../helpers/httpStatusCode');
+const talkerService = require('../services/talkerServices');
+const { OK, NOT_FOUND, INTERNAL_SERVER } = require('../helpers/httpStatusCode');
 
 const getAll = async (req, res) => {
   try {
-    const talkers = await read();
+    const talkers = await talkerService.getAll();
+
+    if (!talkers || talkers.length === 0) {
+      return res.status(NOT_FOUND).json({ message: 'Palestrantes não encontrados' });
+    }
 
     return res.status(OK).json(talkers);
   } catch (e) {
-    return res.status(NOT_FOUND).json({ message: 'Palestrantes não encontrados' });
+    return res.status(INTERNAL_SERVER).json({ message: 'Erro ao tentar realizar operação' });
   }
 };
 
 const getById = async (req, res) => {
   try {
     const { id: talkerId } = req.params;
-    const talker = await read();
+    const talker = await talkerService.getById(talkerId);
 
-    const talkerFinded = talker.find(({ id }) => id === Number(talkerId));
-
-    if (!talkerFinded) throw new Error();
-    console.log(talkerFinded);
-
-    return res.status(OK).json(talkerFinded);
-  } catch (e) {
-    return res
+    if (!talker || talker.length === 0) {
+      return res
       .status(NOT_FOUND)
       .json({ message: 'Pessoa palestrante não encontrada' });
+    }
+
+    return res.status(OK).json(talker);
+  } catch (e) {
+    return res.status(INTERNAL_SERVER).json({ message: 'Erro ao tentar realizar operação' });
   }
 };
 
