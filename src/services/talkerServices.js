@@ -52,9 +52,22 @@ const update = async (objOfReq) => {
   return findTalker;
 };
 
+const deleteTalker = async (id) => {
+  const currTalkers = await talkerModel.read();
+
+  const exclude = currTalkers.filter(({ id: talkerId }) => talkerId !== Number(id));
+
+  console.log(exclude);
+
+  await talkerModel.write(exclude);
+
+  return exclude;
+};
+
 module.exports = {
   getAll,
   getById,
   add,
   update,
+  deleteTalker,
 };

@@ -1,5 +1,7 @@
 const talkerService = require('../services/talkerServices');
-const { OK, NOT_FOUND, INTERNAL_SERVER, CREATED } = require('../helpers/httpStatusCode');
+const { 
+  OK, NOT_FOUND, INTERNAL_SERVER, CREATED, NO_CONTENT, 
+} = require('../helpers/httpStatusCode');
 
 const getAll = async (req, res) => {
   try {
@@ -11,7 +13,7 @@ const getAll = async (req, res) => {
 
     return res.status(OK).json(talkers);
   } catch (e) {
-    return res.status(INTERNAL_SERVER).json({ message: 'Erro ao tentar realizar operação' });
+    return res.status(INTERNAL_SERVER).json({ message: 'Erro ao tentar realizar tarefa' });
   }
 };
 
@@ -59,9 +61,21 @@ const update = async (req, res) => {
   }
 };
 
+const deleteTalker = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await talkerService.deleteTalker(id);
+    console.log(id);
+    return res.status(NO_CONTENT).end();
+  } catch (error) {
+    return res.status(INTERNAL_SERVER).json({ message: 'Erro ao tentar realizar operação' });
+  }
+};
+
 module.exports = {
   getAll,
   getById,
   add,
   update,
+  deleteTalker,
 };
