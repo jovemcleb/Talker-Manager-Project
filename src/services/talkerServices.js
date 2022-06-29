@@ -13,6 +13,18 @@ const getById = async (talkerId) => {
   return talkerFound;
 };
 
+const getByName = async (nameSearch) => {
+  const currTalkers = await talkerModel.read();
+
+  if (!currTalkers) return [];
+
+  const talkerName = currTalkers.filter(({ name: nameTalker }) => nameTalker.includes(nameSearch));
+
+  if (talkerName.length === 0) return currTalkers;
+
+  return talkerName;
+};
+
 const add = async (name, age, watchedAt, rate) => {
   if (name && age && watchedAt && rate) {
     const newTalker = {
@@ -28,17 +40,17 @@ const add = async (name, age, watchedAt, rate) => {
     await talkerModel.write(addUser); 
     return newTalker;
   }
-  return console.log('faltam dados');
+  return [];
 };
 
 const update = async (objOfReq) => {
+  if (!objOfReq) return [];
   const { name, age, watchedAt, rate, id } = objOfReq;
-  console.log(id);
+  
   const objToUpdate = {
     name,
     age,
-    talk: { watchedAt,
-      rate },
+    talk: { watchedAt, rate },
   };
 
   const currTalkers = await talkerModel.read();
@@ -53,6 +65,7 @@ const update = async (objOfReq) => {
 };
 
 const deleteTalker = async (id) => {
+  if (!id) return [];
   const currTalkers = await talkerModel.read();
 
   const exclude = currTalkers.filter(({ id: talkerId }) => talkerId !== Number(id));
@@ -67,6 +80,7 @@ const deleteTalker = async (id) => {
 module.exports = {
   getAll,
   getById,
+  getByName,
   add,
   update,
   deleteTalker,

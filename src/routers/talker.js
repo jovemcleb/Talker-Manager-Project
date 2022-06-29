@@ -5,6 +5,8 @@ const { tokenValidation } = require('../middleware/token');
 
 const router = express.Router();
 
+router.get('/search', tokenValidation, talkerController.getByName);
+
 router.get('/', talkerController.getAll);
 
 router.get('/:id', talkerController.getById);

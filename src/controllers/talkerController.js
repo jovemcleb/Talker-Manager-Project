@@ -30,6 +30,22 @@ const getById = async (req, res) => {
 
     return res.status(OK).json(talker);
   } catch (e) {
+    return res.status(INTERNAL_SERVER).json({ message: 'Erro ao tentar realizar tarefa' });
+  }
+};
+
+const getByName = async (req, res) => {
+  try {
+    const { q: nameSearch } = req.query;
+    console.log(req.query);
+    const talker = await talkerService.getByName(nameSearch);
+
+    // if (!talker) {
+    //   return res.status(NOT_FOUND).json({ message: 'Pessoa palestrante não encontrada' }); 
+    // }
+
+    return res.status(OK).json(talker);
+  } catch (error) {
     return res.status(INTERNAL_SERVER).json({ message: 'Erro ao tentar realizar operação' });
   }
 };
@@ -75,6 +91,7 @@ const deleteTalker = async (req, res) => {
 module.exports = {
   getAll,
   getById,
+  getByName,
   add,
   update,
   deleteTalker,
