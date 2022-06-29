@@ -35,7 +35,6 @@ const getById = async (req, res) => {
 const add = async (req, res) => {
   try {
     const { name, age, talk: { watchedAt, rate } } = req.body;
-    console.log(req.headers);
 
     const addTalker = await talkerService.add(name, age, watchedAt, rate);
     
@@ -45,8 +44,24 @@ const add = async (req, res) => {
   }
 };
 
+const update = async (req, res) => {
+  try {
+    const { name, age, talk: { watchedAt, rate } } = req.body;
+    const { id } = req.params;
+    
+    const objReq = { name, age, watchedAt, rate, id };
+    
+    const updateTalker = await talkerService.update(objReq);
+
+    return res.status(OK).json(updateTalker);
+  } catch (error) {
+    return res.status(INTERNAL_SERVER).json({ message: 'Erro ao tentar realizar operação' });
+  }
+};
+
 module.exports = {
   getAll,
   getById,
   add,
+  update,
 };

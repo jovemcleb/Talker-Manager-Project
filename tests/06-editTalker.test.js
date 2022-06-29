@@ -96,6 +96,7 @@ describe('6 - Crie o endpoint PUT /talker/:id', () => {
               ]),
             );
             const { json } = responseUpdate;
+            console.log(json);
             expect(json.id).toBe(resultTalker.id);
             expect(json.name).toBe('Zendaya');
             expect(json.age).toBe(25);

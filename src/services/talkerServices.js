@@ -31,8 +31,30 @@ const add = async (name, age, watchedAt, rate) => {
   return console.log('faltam dados');
 };
 
+const update = async (objOfReq) => {
+  const { name, age, watchedAt, rate, id } = objOfReq;
+  console.log(id);
+  const objToUpdate = {
+    name,
+    age,
+    talk: { watchedAt,
+      rate },
+  };
+
+  const currTalkers = await talkerModel.read();
+
+  const findTalker = currTalkers.find(({ id: talkerId }) => talkerId === Number(id));
+  
+  Object.assign(findTalker, objToUpdate);
+  
+  await talkerModel.write(currTalkers);
+
+  return findTalker;
+};
+
 module.exports = {
   getAll,
   getById,
   add,
+  update,
 };

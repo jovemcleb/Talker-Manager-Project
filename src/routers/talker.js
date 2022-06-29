@@ -11,4 +11,6 @@ router.get('/:id', talkerController.getById);
 
 router.post('/', tokenValidation, talkerValidation, talkerController.add);
 
+router.put('/:id', tokenValidation, talkerValidation, talkerController.update);
+
 module.exports = router;
